@@ -1,9 +1,11 @@
-from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
 from dotenv import load_dotenv
 import openai
 import os
+import subprocess
 
+from AutoTestGen.settings import BASE_DIR, MEDIA_ROOT
 
 # Create your views here.
 
@@ -65,6 +67,8 @@ def testbot_view(request):
         # Step 3: Test Model Generation
         test_model = generate_test_model(processed_data)
         data["test_model"] = test_model
+
+        generate_uml_test_model()
 
         # Step 4: Test Case Generation
         test_cases = generate_test_cases(test_model)
@@ -132,6 +136,26 @@ def generate_test_model(processed_data):
     return test_model
 
 
+def generate_uml_test_model():
+    # generate a test model using the processed data
+    plantuml_test_model_query = "Generate a test model for the above textual requirement/user stories in PlantUML " \
+                                "format. Please respond with only the PlantUML file. Don't add any natural text " \
+                                "to the response."
+    plantuml_test_model = get_openai_completion_response(plantuml_test_model_query)
+
+    file_path = os.path.join(MEDIA_ROOT, 'diagrams', 'diagram.puml')
+    jar_path = os.path.join(BASE_DIR, 'lib', 'plantuml-1.2023.10.jar')
+
+    with open(file_path, 'w') as file:
+        file.write(plantuml_test_model)
+
+    try:
+        # Generate the image using PlantUML command-line tool
+        subprocess.run(['java', '-jar', jar_path, file_path], check=True)
+    except:
+        pass
+
+
 # Step 4: Test Case Generation
 def generate_test_cases(test_model):
     # generate test cases based on the test model
@@ -197,4 +221,3 @@ def generate_reports(test_results, identified_defects):
     # Implement code to generate reports on the test results
     # Include identified defects or issues
     ...
-
