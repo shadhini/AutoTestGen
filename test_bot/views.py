@@ -27,16 +27,6 @@ def get_openai_completion_response(prompt):
     )
     reply = chat.choices[0].message.content
     messages.append({"role": "assistant", "content": reply})
-    # query = openai.Completion.create(
-    #     engine="gpt-3.5-turbo-16k",
-    #     prompt=prompt,
-    #     max_tokens=1024,
-    #     n=1,
-    #     stop=None,
-    #     temperature=0.5,
-    # )
-    #
-    # response = query.choices[0].text
     print(reply)
     return reply
 
@@ -138,10 +128,9 @@ def generate_test_model(processed_data):
 
 
 def generate_uml_test_model():
-    # generate a test model using the processed data
-    plantuml_test_model_query = "Generate a test model for the above textual requirement/user stories in PlantUML " \
-                                "format. Please respond with only the PlantUML file. Don't add any natural text " \
-                                "to the response."
+    # generate UML test model using the processed data
+    plantuml_test_model_query = "Generate UML test model for the above textual requirement/user stories in PlantUML " \
+                                "format. Please respond with only the PlantUML file."
     plantuml_test_model = get_openai_completion_response(plantuml_test_model_query)
 
     file_path = os.path.join(MEDIA_ROOT, 'diagrams', 'diagram.puml')
