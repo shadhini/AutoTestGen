@@ -32,7 +32,9 @@
 				// Add the prompt to the response div
 				$('#user_input').html('<h5>Textual Requirement | User Stories Given: </h5>' + prompt.replace(/\n/g, "<br>"));
                 $('#test_model').html('<h5>Test Model: </h5> <br> Loading ...');
-                $('#test_cases').html('<h5>Test Cases: </h5> <br> Loading ...')
+                $('#test_cases').html('<h5>Test Cases: </h5> <br> Loading ...');
+                $('#test_scripts').html('<h5>Test Scripts: </h5> <br> Loading ...');
+                $('#test_data').html('<h5>Test Data: </h5> <br> Loading ...');
 				// Clear the prompt
 				$('#prompt').val('');
 				$.ajax({
@@ -48,6 +50,10 @@
 						$('#test_model').html('<h5>Test Model: </h5>' + testModelFormattedResponse);
                         var testCasesFormattedResponse = data.test_cases.replace(/\n/g, "<br>");
 						$('#test_cases').html('<h5>Test Cases: </h5>' + testCasesFormattedResponse);
+                        var testScriptsFormattedResponse = data.test_scripts.replace(/\n/g, "<br>");
+						$('#test_scripts').html('<h5>Test Scripts: </h5>' + testScriptsFormattedResponse);
+                        var testDataFormattedResponse = data.test_data.replace(/\n/g, "<br>");
+						$('#test_data').html('<h5>Test Data: </h5>' + testDataFormattedResponse);
 					}
 				});
 			});
@@ -71,14 +77,20 @@
 		</div>
 		<br>
 {#        <h3>Auto Test Gen Response:</h3>#}
-        <div class="mb-3">
-			<div class="container border" id="user_input"></div>
+        <div class="mb-3 bg-secondary text-light rounded">
+			<div class="container" id="user_input"></div>
 		</div>
-		<div class="mb-3">
-			<div class="container border" id="test_model"></div>
+		<div class="mb-3 bg-light rounded">
+			<div class="container" id="test_model"></div>
 		</div>
-        <div class="mb-3">
-			<div class="container border" id="test_cases"></div>
+        <div class="mb-3 bg-light text-primary rounded">
+			<div class="container" id="test_cases"></div>
+		</div>
+        <div class="mb-3 bg-light rounded">
+			<div class="container" id="test_scripts"></div>
+		</div>
+        <div class="mb-3 bg-light text-primary rounded">
+			<div class="container" id="test_data"></div>
 		</div>
 	</div>
 </body>

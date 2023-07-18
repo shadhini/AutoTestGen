@@ -77,12 +77,14 @@ def testbot_view(request):
         test_cases = generate_test_cases(test_model)
         data["test_cases"] = test_cases
 
-        # # Step 5: Test Script Generation
-        # test_scripts = generate_test_scripts(test_cases)
-        #
-        # # Step 6: Test Data Generation
-        # test_data = generate_test_data(test_cases)
-        #
+        # Step 5: Test Script Generation
+        test_scripts = generate_test_scripts(test_cases)
+        data["test_scripts"] = test_scripts
+
+        # Step 6: Test Data Generation
+        test_data = generate_test_data(test_cases)
+        data["test_data"] = test_data
+
         # # Step 7: Test Execution
         # test_results = execute_test_scripts(test_scripts, test_data)
         #
@@ -127,7 +129,7 @@ def generate_test_model(processed_data):
 
 # Step 4: Test Case Generation
 def generate_test_cases(test_model):
-    # Implement code to generate test cases based on the test model
+    # generate test cases based on the test model
     test_cases_query = "Generate test cases based on the test model given below \n" + test_model
     test_cases = get_openai_completion_response(test_cases_query)
 
@@ -136,16 +138,18 @@ def generate_test_cases(test_model):
 
 # Step 5: Test Script Generation
 def generate_test_scripts(test_cases):
-    # Implement code to generate test scripts based on the test cases
-    test_scripts = ...
+    # generate test scripts based on the test cases
+    test_scripts_query = "Generate test scripts in python based on the test cases given below \n" + test_cases
+    test_scripts = get_openai_completion_response(test_scripts_query)
 
     return test_scripts
 
 
 # Step 6: Test Data Generation
 def generate_test_data(test_cases):
-    # Implement code to generate test data for the test cases
-    test_data = ...
+    # generate test data for the test cases
+    test_data_query = "Generate test data for the test cases given below \n" + test_cases
+    test_data = get_openai_completion_response(test_data_query)
 
     return test_data
 
