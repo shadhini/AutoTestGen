@@ -30,7 +30,9 @@
 				var dateTime = new Date();
 				var time = dateTime.toLocaleTimeString();
 				// Add the prompt to the response div
-				{#$('#response').append('<p>('+ time + ') <i class="bi bi-person"></i>: ' + prompt + '</p>');#}
+				$('#user_input').html('<h5>Textual Requirement | User Stories Given: </h5>' + prompt.replace(/\n/g, "<br>"));
+                $('#test_model').html('<h5>Test Model: </h5> <br> Loading ...');
+                $('#test_cases').html('<h5>Test Cases: </h5> <br> Loading ...')
 				// Clear the prompt
 				$('#prompt').val('');
 				$.ajax({
@@ -42,8 +44,10 @@
 						$('#response').append('<p>('+ time + ') <i class="bi bi-robot"></i>: ' + data.response + '</p>');
 					}{% endcomment %}
                     success: function(data) {
-                        var formattedResponse = data.test_model.replace(/\n/g, "<br>");
-						$('#test_model').append('<h5>Test Model: </h5>' + formattedResponse);
+                        var testModelFormattedResponse = data.test_model.replace(/\n/g, "<br>");
+						$('#test_model').html('<h5>Test Model: </h5>' + testModelFormattedResponse);
+                        var testCasesFormattedResponse = data.test_cases.replace(/\n/g, "<br>");
+						$('#test_cases').html('<h5>Test Cases: </h5>' + testCasesFormattedResponse);
 					}
 				});
 			});
@@ -67,8 +71,14 @@
 		</div>
 		<br>
 {#        <h3>Auto Test Gen Response:</h3>#}
+        <div class="mb-3">
+			<div class="container border" id="user_input"></div>
+		</div>
 		<div class="mb-3">
 			<div class="container border" id="test_model"></div>
+		</div>
+        <div class="mb-3">
+			<div class="container border" id="test_cases"></div>
 		</div>
 	</div>
 </body>

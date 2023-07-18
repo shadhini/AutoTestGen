@@ -73,9 +73,10 @@ def testbot_view(request):
         test_model = generate_test_model(processed_data)
         data["test_model"] = test_model
 
-        # # Step 4: Test Case Generation
-        # test_cases = generate_test_cases(test_model)
-        #
+        # Step 4: Test Case Generation
+        test_cases = generate_test_cases(test_model)
+        data["test_cases"] = test_cases
+
         # # Step 5: Test Script Generation
         # test_scripts = generate_test_scripts(test_cases)
         #
@@ -99,7 +100,6 @@ def testbot_view(request):
         #
         # prompt = request.POST.get('prompt')
         # response = get_openai_completion_response(prompt)
-        print("chatbot response received")
         return JsonResponse(data)
     return render(request, 'testbot.html')
 
@@ -128,7 +128,8 @@ def generate_test_model(processed_data):
 # Step 4: Test Case Generation
 def generate_test_cases(test_model):
     # Implement code to generate test cases based on the test model
-    test_cases = ...
+    test_cases_query = "Generate test cases based on the test model given below \n" + test_model
+    test_cases = get_openai_completion_response(test_cases_query)
 
     return test_cases
 
