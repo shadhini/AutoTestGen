@@ -12,25 +12,18 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 openai.api_key = OPENAI_API_KEY
 
-messages = [
-    {"role": "system",
-     "content": "You are an AI specialized in General-Purpose Testing Engine capable of generating  a structured test "
-                "model, such as a UML diagram based on given textual requirements or user stories, generating test "
-                "cases, test scripts, and test data automatically based on that test model, simulating user "
-                "interactions with the software system, executing the generated tests and validating the results and "
-                "analyzing the test logs and system outputs to identify any deviations or defects."},
-    {}
-]
+messages = []
 
 
 def get_openai_completion_response(prompt):
     print("Get completion")
     print(prompt)
-    messages[1] = {"role": "user", "content": prompt}
+    messages.append({"role": "user", "content": prompt})
     chat = openai.ChatCompletion.create(
         model="gpt-3.5-turbo", messages=messages
     )
     reply = chat.choices[0].message.content
+    messages.append({"role": "assistant", "content": reply})
     # query = openai.Completion.create(
     #     engine="gpt-3.5-turbo-16k",
     #     prompt=prompt,
@@ -114,6 +107,18 @@ def get_user_input(request):
 
 # Step 2: Input Processing
 def process_input(input_text):
+    # initialize messages
+    global messages
+    messages = [
+        {"role": "system",
+         "content": "You are an AI specialized in General-Purpose Testing Engine capable of generating  a structured "
+                    "test model, such as a UML diagram based on given textual requirements or user stories, "
+                    "generating test cases, test scripts, and test data automatically based on that test model, "
+                    "simulating user interactions with the software system, executing the generated tests and "
+                    "validating the results and analyzing the test logs and system outputs to identify any deviations "
+                    "or defects."},
+    ]
+    # process input
     processed_data = input_text
     return processed_data
 
@@ -130,7 +135,8 @@ def generate_test_model(processed_data):
 # Step 4: Test Case Generation
 def generate_test_cases(test_model):
     # generate test cases based on the test model
-    test_cases_query = "Generate test cases based on the test model given below \n" + test_model
+    # test_cases_query = "Generate test cases based on the test model given below \n" + test_model
+    test_cases_query = "Generate test cases based on the test model generated above."
     test_cases = get_openai_completion_response(test_cases_query)
 
     return test_cases
@@ -139,7 +145,8 @@ def generate_test_cases(test_model):
 # Step 5: Test Script Generation
 def generate_test_scripts(test_cases):
     # generate test scripts based on the test cases
-    test_scripts_query = "Generate test scripts in python based on the test cases given below \n" + test_cases
+    # test_scripts_query = "Generate test scripts in python based on the test cases given below \n" + test_cases
+    test_scripts_query = "Generate test scripts in python based on the test cases generated above."
     test_scripts = get_openai_completion_response(test_scripts_query)
 
     return test_scripts
@@ -148,7 +155,8 @@ def generate_test_scripts(test_cases):
 # Step 6: Test Data Generation
 def generate_test_data(test_cases):
     # generate test data for the test cases
-    test_data_query = "Generate test data for the test cases given below \n" + test_cases
+    # test_data_query = "Generate test data for the test cases given below \n" + test_cases
+    test_data_query = "Generate test data for the test cases generated above. "
     test_data = get_openai_completion_response(test_data_query)
 
     return test_data
