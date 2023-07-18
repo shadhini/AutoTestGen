@@ -1,9 +1,10 @@
+import os
+import subprocess
+
+import openai
 from django.http import JsonResponse
 from django.shortcuts import render
 from dotenv import load_dotenv
-import openai
-import os
-import subprocess
 
 from AutoTestGen.settings import BASE_DIR, MEDIA_ROOT
 
