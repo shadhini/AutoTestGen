@@ -8,6 +8,8 @@ django = "*"
 openai = "*"
 python-dotenv = "*"
 django-bootstrap4 = "*"
+graphviz = "*"
+plantuml = "*"
 
 [dev-packages]
 
