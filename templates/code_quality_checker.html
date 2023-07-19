@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Code Quality Checker</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
@@ -11,72 +11,41 @@
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
           integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
-    <script>
-        $(document).ready(function () {
-            $("#upload-form").submit(function (e) {
-                e.preventDefault();
-                var form = $(this);
-                var url = form.attr('action');
-                var formData = new FormData(form[0]);
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        $("#file-preview").text(response.file);
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    }
-                });
-            });
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $('#analyze-button').on('click', function () {
+                var form_data = new FormData();
+                var ins = document.getElementById('multi-files-input').files.length;
 
-            $("#file-input").change(function () {
-                var fileInput = $(this);
-                var fileName = fileInput.val().split('\\').pop();
-                $("#file-preview").text("Selected File: " + fileName);
-            });
-
-            // Send the form on enter keypress and avoid if shift is pressed
-            $('#prompt').keypress(function (event) {
-                if (event.keyCode === 13 && !event.shiftKey) {
-                    event.preventDefault();
-                    $('form').submit();
+                if (ins == 0) {
+                    $('#msg').html('<span style="color:red">Select at least one file</span>');
+                    return;
                 }
-            });
-            $('form').on('submit', function (event) {
-                event.preventDefault();
-                // get the CSRF token from the cookie
-                var csrftoken = Cookies.get('csrftoken');
 
-                // set the CSRF token in the AJAX headers
-                $.ajaxSetup({
-                    headers: {'X-CSRFToken': csrftoken}
-                });
-                // Get the prompt
-                var prompt = $('#prompt').val();
-                var dateTime = new Date();
-                var time = dateTime.toLocaleTimeString();
-                // Add the prompt to the response div
-                $('#user_input').html('<h5>Textual Requirement | User Stories Given: </h5>' + prompt.replace(/\n/g, "<br>"));
-                $('#test_model').html('<h5>Test Model: </h5> <br> Loading ...');
-                // Clear the prompt
-                $('#prompt').val('');
+                for (var x = 0; x < ins; x++) {
+                    form_data.append("files[]", document.getElementById('multi-files-input').files[x]);
+                }
+
+                csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+
+                //console.log(csrf_token);
+
+                form_data.append("csrfmiddlewaretoken", csrf_token);
+
                 $.ajax({
-                    url: '/code_quality_checker/',
-                    type: 'POST',
-                    data: {prompt: prompt},
-                    dataType: 'json',
-                    {% comment %}success: function(data) {
-                        $('#response').append('<p>('+ time + ') <i class="bi bi-robot"></i>: ' + data.response + '</p>');
-                    }{% endcomment %}
-                    success: function (data) {
-                        var testModelFormattedResponse = data.test_model.replace(/\n/g, "<br>");
-                        $('#test_model').html('<h5>Test Model: </h5>' + testModelFormattedResponse);
-                        $('#uml_test_model').html('<h5>UML Diagram: </h5> ' +
-                            '<img src="../media/diagrams/diagram.png" alt="UML Diagram">');
+                    url: '/code-quality-checker/',
+                    dataType: 'json', // what to expect back from server
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    //data: {'data': form_data, 'csrfmiddlewaretoken': csrf_token},
+                    data: form_data,
+                    type: 'post',
+                    success: function (response) { // display success response
+                        $('#msg').html(response.msg);
+                    },
+                    error: function (response) {
+                        $('#msg').html(response.message); // display error response
                     }
                 });
             });
@@ -89,25 +58,19 @@
     Code quality analyzing tool powered by OpenAi ...
     <hr>
 
-    <form id="upload-form" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" id="file-input" name="file">
-        <button type="submit">Upload</button>
-    </form>
-    <div id="file-preview"></div>
-
-    <div class="mb-3">
-        <form method="post">
+    <fieldset name="Multiple Files Upload">
+        {% if msg %} {% autoescape off %} {{ msg }} {% endautoescape %} {% endif %}
+        <div id="msg"></div>
+        <p>
             {% csrf_token %}
-            <label for="prompt" class="form-label"><strong>Please enter your textual requirement or user stories
-                here: </strong></label>
-            <textarea class="form-control" type="textarea" id="prompt" name="prompt" rows="12"></textarea>
+            <input type="file" id="multi-files-input" name="files[]" multiple="multiple"/>
             <br>
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </form>
-    </div>
+            <br>
+            <button id="analyze-button" class="btn btn-primary">Upload and Analyze Code</button>
+        </p>
+    </fieldset>
+
     <br>
-    {#        <h3>Auto Test Gen Response:</h3>#}
     <div class="mb-3 bg-secondary text-light rounded">
         <div class="container" id="user_input"></div>
     </div>
