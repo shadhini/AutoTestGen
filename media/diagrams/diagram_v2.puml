@@ -1,0 +1,30 @@
+```plantuml
+@startuml
+
+class "User" as user
+class "Shopping Cart"
+
+user --> "Create Account" : name, email address, password
+user --> "Log In" : email address, password
+user --> "Add Item" : item details
+user --> "View Item Details" : item ID
+user --> "Update Item Quantity" : item ID, quantity
+user --> "Remove Item" : item ID
+user --> "Proceed to Checkout" : shipping/payment information
+user --> "Receive Confirmation Email"
+user --> "Track Order Status" : order ID
+user --> "Update Account Information" : updated information
+
+"Create Account" --> "Account"
+"Log In" --> "Account"
+"Add Item" --> "Shopping Cart"
+"View Item Details" --> "Shopping Cart"
+"Update Item Quantity" --> "Shopping Cart"
+"Remove Item" --> "Shopping Cart"
+"Proceed to Checkout" --> "Order"
+"Receive Confirmation Email" --> "Email"
+"Track Order Status" --> "Order"
+"Update Account Information" --> "Account"
+
+@enduml
+```
