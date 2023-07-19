@@ -6,8 +6,8 @@ This prototype utilize ChatGPT to automate the test model creation, test generat
 stages.
 
 - The prototype testing engine feature a user interface to input textual requirements or user stories.
-- `[not implemented yet]` The LLM would process the input and generate a structured test model, such as a UML diagram.
-- `[not implemented yet]` Based on the test model, the LLM would generate test cases, test scripts, and test data
+- The LLM would process the input and generate a structured test model, such as a UML diagram.
+- Based on the test model, the LLM would generate test cases, test scripts, and test data
   automatically.
 - `[not implemented yet]` The testing engine would then simulate user interactions with the software system, utilizing
   the LLM to execute the generated tests and validate the results.
