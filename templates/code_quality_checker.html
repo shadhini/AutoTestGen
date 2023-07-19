@@ -22,6 +22,8 @@
                     return;
                 }
 
+                $('#response').html('<h5>Analysis: </h5> <br> We are analysing files you\'ve submitted ... Please wait ...');
+
                 for (var x = 0; x < ins; x++) {
                     form_data.append("files[]", document.getElementById('multi-files-input').files[x]);
                 }
@@ -47,11 +49,11 @@
                         var responseView = $('#response');
                         var responseData = response.analysis;
 
-                        // Iterate through the list and append each object to the unordered list
+                        // Iterate through the list and append each analysis
                         responseData.forEach(function (file) {
                             responseView.append('<h3>' + file.file_name + "</h3>");
-                            responseView.append('<div class="col-10" style="background-color: #f3f4f6; color: #7825be;"><h5>Code</h5>' + file.file_content.replace(/\n/g, "<br>") + '</div>');
-                            responseView.append('<div class="col-10" style="background-color: #bfecbe; color: #145f13;"> <h5>Analysis</h5>' + file.openai_analysis.replace(/\n/g, "<br>") + "</div>");
+                            responseView.append('<div class="col-10" style="background-color: #f3f4f6; color: #7825be;"><h5>Code</h5><pre>' + file.file_content + '</pre></div>');
+                            responseView.append('<div class="col-10" style="background-color: #bfecbe; color: #145f13;"> <h5>Analysis</h5><pre>' + file.openai_analysis+ "</pre></div>");
                         });
                     },
                     error: function (response) {
@@ -64,7 +66,7 @@
 </head>
 <body>
 <div class="container p-3">
-    <h1>Code Quality Checker</h1>
+    <h1>Smart Reviewer</h1>
     Code quality analyzing tool powered by OpenAi ...
     <hr>
 
