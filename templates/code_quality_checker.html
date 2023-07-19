@@ -46,7 +46,7 @@
                     success: function (response) { // display success response
                         $('#msg').html(response.msg);
                         // 'response.analysis' contains the list of objects received from the server
-                        var responseView = $('#response');
+                        var responseView = $('#response').html('');
                         var responseData = response.analysis;
 
                         // Iterate through the list and append each analysis
