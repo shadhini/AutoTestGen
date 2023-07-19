@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "test_bot.apps.TestBotConfig",
+    "code_quality_checker.apps.CodeQualityCheckerConfig"
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
