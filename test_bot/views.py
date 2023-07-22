@@ -60,6 +60,7 @@ def testbot_view(request):
         data["test_model"] = test_model
 
         generate_uml_test_model()
+        data["uml_diagram_path"] = 'http://127.0.0.1:8080/diagrams/diagram.png'
 
         # Step 4: Test Case Generation
         test_cases = generate_test_cases(test_model)

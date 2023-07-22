@@ -36,7 +36,7 @@
                 var dateTime = new Date();
                 var time = dateTime.toLocaleTimeString();
                 // Add the prompt to the response div
-                $('#user_input').html('<h5>Textual Requirement | User Stories Given: </h5>' + prompt.replace(/\n/g, "<br>"));
+                $('#user_input').html('<h5>Textual Requirement | User Stories Given: </h5> <pre>' + prompt + "</pre>");
                 $('#card_test_model').html('Loading ...');
                 $('#card_uml_test_model').html('Loading ...');
                 $('#card_test_cases').html('Loading ...');
@@ -54,7 +54,7 @@
                     }{% endcomment %}
                     success: function (data) {
                         $('#card_test_model').html('<pre>' + data.test_model + '</pre>');
-                        $('#card_uml_test_model').html('<img src="../media/diagrams/diagram.png" alt="UML Diagram">');
+                        $('#card_uml_test_model').html('<img src="' + data.uml_diagram_path + '" alt="UML Diagram">');
                         $('#card_test_cases').html('<pre>' + data.test_cases + '</pre>');
                         $('#card_test_scripts').html('<pre>' + data.test_scripts + '</pre>');
                         $('#card_test_data').html('<pre>' + data.test_data + '</pre>');
@@ -86,7 +86,7 @@
         <div class="container" id="user_input"></div>
     </div>
 
-    <div id="accordion">
+{#    <div id="accordion">#}
         <!-- Test Model -->
         <div class="card">
             <div class="card-header" id="heading_test_model">
@@ -181,7 +181,7 @@
                 </div>
             </div>
         </div>
-    </div>
+{#    </div>#}
 </div>
 </body>
 </html>
