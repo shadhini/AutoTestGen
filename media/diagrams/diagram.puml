@@ -1,0 +1,47 @@
+@startuml
+
+left to right direction
+
+actor User as U
+
+rectangle "Create a new account" {
+  U -- (Provide Name, Email Address, Password)
+}
+
+rectangle "Log in to account" {
+  U -- (Provide Email Address, Password)
+}
+
+rectangle "Add items to shopping cart" {
+  U -- (Add Items)
+}
+
+rectangle "View item details in shopping cart" {
+  U -- (View Item Details)
+}
+
+rectangle "Update item quantity in shopping cart" {
+  U -- (Update Quantity)
+}
+
+rectangle "Remove items from shopping cart" {
+  U -- (Remove Items)
+}
+
+rectangle "Proceed to checkout" {
+  U -- (Provide Shipping, Payment Info)
+}
+
+rectangle "Receive confirmation email for placed order" {
+  U -- (Receive Confirmation Email)
+}
+
+rectangle "Track order status" {
+  U -- (Track Order Status)
+}
+
+rectangle "Update account information" {
+  U -- (Update Account Info)
+}
+
+@enduml
